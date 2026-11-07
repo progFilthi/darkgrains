@@ -69,6 +69,7 @@ target_sources(DarkGrain
     PRIVATE
         source/PluginProcessor.cpp
         source/PluginEditor.cpp
+        source/dsp/DarkReverb.cpp
         source/parameters/ParameterLayout.cpp
 )
 
@@ -103,10 +104,12 @@ if(DARKGRAIN_BUILD_TESTS)
         PRIVATE
             source/PluginProcessor.cpp
             source/PluginEditor.cpp
+            source/dsp/DarkReverb.cpp
             source/parameters/ParameterLayout.cpp
             tests/TestRunner.cpp
             tests/ParameterTests.cpp
             tests/ProcessorTests.cpp
+            tests/ReverbTests.cpp
     )
 
     target_include_directories(DarkGrainTests PRIVATE source)

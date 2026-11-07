@@ -2,14 +2,19 @@
 
 #include <juce_audio_processors/juce_audio_processors.h>
 
+#include "dsp/DarkReverb.h"
+
 #include <atomic>
 
 /**
     DarkGrain's audio processor.
 
-    Milestone 1 is deliberately a clean stereo passthrough. It establishes the
-    APVTS parameter tree, state persistence, smoothed input/output gain, and a
-    click-free host bypass crossfade. DSP engines are added in later milestones.
+    Milestone 1 established the APVTS parameter tree, state persistence, smoothed
+    input/output gain, and a click-free host bypass crossfade. Milestone 2 adds the
+    dark feedback-delay-network reverb, including pre-delay, damping, diffusion,
+    modulation, stereo width and wet/dry blending.
+
+    The grain and particle engines arrive in later milestones.
 */
 class DarkGrainAudioProcessor final : public juce::AudioProcessor
 {
@@ -28,7 +33,7 @@ public:
     bool acceptsMidi() const override { return false; }
     bool producesMidi() const override { return false; }
     bool isMidiEffect() const override { return false; }
-    double getTailLengthSeconds() const override { return 0.0; }
+    double getTailLengthSeconds() const override { return 10.0; }
 
     int getNumPrograms() override { return 1; }
     int getCurrentProgram() override { return 0; }
@@ -57,14 +62,41 @@ public:
         return outputMeterLevel.load (std::memory_order_relaxed);
     }
 
+    /** True while the reverb is in freeze mode. Read by the editor. */
+    bool isFrozen() const noexcept
+    {
+        return freezeValue != nullptr && freezeValue->load (std::memory_order_relaxed) >= 0.5f;
+    }
+
 private:
+    void updateReverbParameters (darkgrain::dsp::DarkReverb::Parameters& destination) const noexcept;
+
     std::atomic<float>* inputGainValue = nullptr;
     std::atomic<float>* outputGainValue = nullptr;
     std::atomic<float>* bypassValue = nullptr;
 
+    std::atomic<float>* reverbSizeValue = nullptr;
+    std::atomic<float>* reverbDampingValue = nullptr;
+    std::atomic<float>* diffusionValue = nullptr;
+    std::atomic<float>* modulationRateValue = nullptr;
+    std::atomic<float>* modulationDepthValue = nullptr;
+    std::atomic<float>* preDelayValue = nullptr;
+    std::atomic<float>* reverbMixValue = nullptr;
+    std::atomic<float>* widthValue = nullptr;
+    std::atomic<float>* dryWetValue = nullptr;
+    std::atomic<float>* freezeValue = nullptr;
+
     juce::SmoothedValue<float> inputGainSmoothed;
     juce::SmoothedValue<float> outputGainSmoothed;
     juce::SmoothedValue<float> bypassMixSmoothed;
+    juce::SmoothedValue<float> reverbMixSmoothed;
+    juce::SmoothedValue<float> dryWetSmoothed;
+
+    darkgrain::dsp::DarkReverb reverb;
+
+    // Pre-allocated in prepareToPlay(); processBlock() never allocates.
+    juce::AudioBuffer<float> dryBuffer;
+    juce::AudioBuffer<float> wetBuffer;
 
     std::atomic<float> inputMeterLevel { 0.0f };
     std::atomic<float> outputMeterLevel { 0.0f };

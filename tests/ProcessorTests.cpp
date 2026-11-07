@@ -63,6 +63,7 @@ public:
             for (const auto blockSize : blockSizes)
             {
                 DarkGrainAudioProcessor processor;
+                setParameter (processor, darkgrain::parameters::ids::dryWet, 0.0f);
                 processor.prepareToPlay (sampleRate, blockSize);
 
                 juce::AudioBuffer<float> buffer (2, blockSize);
@@ -93,6 +94,7 @@ public:
         {
             DarkGrainAudioProcessor processor;
             setParameter (processor, darkgrain::parameters::ids::inputGain, 6.0f);
+            setParameter (processor, darkgrain::parameters::ids::dryWet, 0.0f);
             processor.prepareToPlay (48000.0, 512);
 
             juce::AudioBuffer<float> buffer (2, 512);
@@ -120,6 +122,7 @@ public:
         {
             DarkGrainAudioProcessor processor;
             setParameter (processor, darkgrain::parameters::ids::outputGain, -6.0f);
+            setParameter (processor, darkgrain::parameters::ids::dryWet, 0.0f);
             processor.prepareToPlay (48000.0, 512);
 
             juce::AudioBuffer<float> buffer (2, 512);
@@ -149,6 +152,7 @@ public:
         {
             DarkGrainAudioProcessor processor;
             setParameter (processor, darkgrain::parameters::ids::inputGain, 12.0f);
+            setParameter (processor, darkgrain::parameters::ids::dryWet, 0.0f);
             processor.prepareToPlay (48000.0, 512);
 
             constexpr int blockSize = 512;
@@ -204,6 +208,7 @@ public:
 
         {
             DarkGrainAudioProcessor processor;
+            setParameter (processor, darkgrain::parameters::ids::dryWet, 0.0f);
             processor.prepareToPlay (96000.0, 1024);
 
             juce::AudioBuffer<float> buffer (2, 1024);
