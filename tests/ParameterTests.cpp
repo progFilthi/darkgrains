@@ -13,7 +13,7 @@ struct ExpectedFloatParameter
     float defaultValue;
 };
 
-constexpr std::array<ExpectedFloatParameter, 24> expectedFloatParameters {{
+constexpr std::array<ExpectedFloatParameter, 29> expectedFloatParameters {{
     { darkgrain::parameters::ids::inputGain, -24.0f, 24.0f, 0.0f },
     { darkgrain::parameters::ids::highPass, 20.0f, 1000.0f, 40.0f },
     { darkgrain::parameters::ids::grainSize, 10.0f, 500.0f, 90.0f },
@@ -26,6 +26,11 @@ constexpr std::array<ExpectedFloatParameter, 24> expectedFloatParameters {{
     { darkgrain::parameters::ids::particleDensity, 0.0f, 100.0f, 35.0f },
     { darkgrain::parameters::ids::particleBrightness, 0.0f, 100.0f, 40.0f },
     { darkgrain::parameters::ids::particleRandomness, 0.0f, 100.0f, 50.0f },
+    { darkgrain::parameters::ids::particleSize, 10.0f, 500.0f, 70.0f },
+    { darkgrain::parameters::ids::particlePitch, -24.0f, 0.0f, -7.0f },
+    { darkgrain::parameters::ids::particleWidth, 0.0f, 100.0f, 55.0f },
+    { darkgrain::parameters::ids::particleFeedback, 0.0f, 100.0f, 20.0f },
+    { darkgrain::parameters::ids::particleMix, 0.0f, 100.0f, 30.0f },
     { darkgrain::parameters::ids::reverbSize, 0.1f, 10.0f, 2.5f },
     { darkgrain::parameters::ids::reverbDamping, 0.0f, 100.0f, 55.0f },
     { darkgrain::parameters::ids::diffusion, 0.0f, 100.0f, 60.0f },
@@ -60,7 +65,7 @@ public:
         beginTest ("README parameter set exists");
 
         DarkGrainAudioProcessor processor;
-        expectEquals (processor.getParameters().size(), 26);
+        expectEquals (processor.getParameters().size(), 31);
 
         for (const auto& expected : expectedFloatParameters)
             expect (processor.apvts.getParameter (expected.id) != nullptr,

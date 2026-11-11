@@ -71,6 +71,15 @@ ParameterLayout createParameterLayout()
     layout.add (makeFloat (ids::particleBrightness, "Particle Brightness", { 0.0f, 100.0f, 0.1f }, 40.0f, "%"));
     layout.add (makeFloat (ids::particleRandomness, "Particle Randomness", { 0.0f, 100.0f, 0.1f }, 50.0f, "%"));
 
+    auto particleSizeRange = juce::NormalisableRange<float> { 10.0f, 500.0f, 0.1f };
+    particleSizeRange.setSkewForCentre (90.0f);
+    layout.add (makeFloat (ids::particleSize, "Particle Size", particleSizeRange, 70.0f, "ms"));
+
+    layout.add (makeFloat (ids::particlePitch, "Particle Pitch", { -24.0f, 0.0f, 0.01f }, -7.0f, "st"));
+    layout.add (makeFloat (ids::particleWidth, "Particle Width", { 0.0f, 100.0f, 0.1f }, 55.0f, "%"));
+    layout.add (makeFloat (ids::particleFeedback, "Particle Feedback", { 0.0f, 100.0f, 0.1f }, 20.0f, "%"));
+    layout.add (makeFloat (ids::particleMix, "Particle Mix", { 0.0f, 100.0f, 0.1f }, 30.0f, "%"));
+
     // SPACE
     auto reverbSizeRange = juce::NormalisableRange<float> { 0.1f, 10.0f, 0.01f };
     reverbSizeRange.setSkewForCentre (2.5f);

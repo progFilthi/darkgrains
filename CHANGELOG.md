@@ -21,4 +21,47 @@
 - A clean configure/build using JUCE 9.0.5 fetched through `FetchContent` (no local JUCE path) also
   builds and passes the unit tests.
 
+## Milestone 2 — Dark reverb
+
+- Added an 8-line feedback delay network reverb with mutually prime delay lengths.
+- Added pre-delay (0–500 ms), reverb size (0.1–10 s), damping, diffusion, modulation rate/depth,
+  stereo width, and wet/dry mixing.
+- Added input diffusion all-pass filters, low-cut, freeze, and a stable feedback ceiling.
+- Extended the processor to run the reverb chain with smoothed mix and width controls.
+- Added reverb stability, tail, and automation tests.
+
+## Milestone 3 — Grain engine
+
+- Added a 4-second stereo circular input buffer with fractional reads and safe wraparound.
+- Added an overlap-add granular engine with Hann-windowed grains, 10–500 ms grain sizes,
+  1–64 grains/s density, position spread, ±24 st pitch, pitch scatter, reverse grains,
+  stereo scatter, and freeze.
+- Added click-free freeze behaviour that stops the write head and recycles the held material.
+- Added grain buffer, wraparound, freeze, and extreme-setting stability tests.
+
+## Milestone 4 — Particles and final tone
+
+- Added a particle engine with density, size, brightness, pitch, pan width, randomness,
+  feedback, and mix controls.
+- Particles combine short band-passed grains, filtered noise, randomized pitch/pan/envelopes,
+  and a bounded feedback delay.
+- Added tilt-style dark tone shaping, musical saturation, mid/side stereo width, and an
+  output safety limiter.
+- Added the five particle controls required by the brief (size, pitch, width, feedback, mix),
+  bringing the parameter tree to 31 parameters.
+- Added full-chain automation tests at multiple sample rates and block sizes.
+
+## Milestone 5 — UI and polish
+
+- Added the complete dark native interface with INPUT, GRAINS, PARTICLES, SPACE, and OUTPUT panels.
+- Added custom rotary knobs, panel styling, freeze indicator, host bypass, and an IN/OUT level meter.
+- Added a preset bar with six factory presets (Init, Cinematic Dark, Frozen Choir, Granular Storm,
+  Dust Particles, Deep Space) and user preset save/load as XML in
+  `~/Library/Application Support/DarkGrain/Presets`.
+- Added editor construction, painting, factory preset, rapid preset switching, and
+  sample-rate-change tests.
+- Added a signal flow that keeps the dry path clean and phase-coherent while the wet chain
+  runs grains, particles, reverb, tone, saturation, width, and limiting.
+- Final Release build validated with `pluginval` at strictness 6 and 10 (`SUCCESS`).
+
 No AAX, cloud, license-server, or out-of-scope features have been added.

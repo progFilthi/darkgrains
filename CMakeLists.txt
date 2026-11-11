@@ -70,7 +70,14 @@ target_sources(DarkGrain
         source/PluginProcessor.cpp
         source/PluginEditor.cpp
         source/dsp/DarkReverb.cpp
+        source/dsp/Filter.cpp
+        source/dsp/GrainEngine.cpp
+        source/dsp/Limiter.cpp
+        source/dsp/ParticleEngine.cpp
+        source/dsp/Saturation.cpp
+        source/dsp/StereoWidth.cpp
         source/parameters/ParameterLayout.cpp
+        source/state/PresetManager.cpp
 )
 
 target_include_directories(DarkGrain PUBLIC source)
@@ -105,8 +112,17 @@ if(DARKGRAIN_BUILD_TESTS)
             source/PluginProcessor.cpp
             source/PluginEditor.cpp
             source/dsp/DarkReverb.cpp
+            source/dsp/Filter.cpp
+            source/dsp/GrainEngine.cpp
+            source/dsp/Limiter.cpp
+            source/dsp/ParticleEngine.cpp
+            source/dsp/Saturation.cpp
+            source/dsp/StereoWidth.cpp
             source/parameters/ParameterLayout.cpp
+            source/state/PresetManager.cpp
             tests/TestRunner.cpp
+            tests/EditorAndPresetTests.cpp
+            tests/GrainEngineTests.cpp
             tests/ParameterTests.cpp
             tests/ProcessorTests.cpp
             tests/ReverbTests.cpp
