@@ -1,6 +1,7 @@
 #include "PluginProcessor.h"
 
 #include "PluginEditor.h"
+#include "dsp/Scale.h"
 #include "parameters/ParameterIDs.h"
 #include "parameters/ParameterLayout.h"
 
@@ -61,6 +62,7 @@ DarkGrainAudioProcessor::DarkGrainAudioProcessor()
     saturationValue = apvts.getRawParameterValue (ids::saturation);
     widthValue = apvts.getRawParameterValue (ids::width);
     dryWetValue = apvts.getRawParameterValue (ids::dryWet);
+    scaleValue = apvts.getRawParameterValue (ids::scale);
 
     jassert (inputGainValue != nullptr && highPassValue != nullptr);
     jassert (outputGainValue != nullptr && bypassValue != nullptr);
@@ -78,6 +80,7 @@ DarkGrainAudioProcessor::DarkGrainAudioProcessor()
     jassert (reverbMixValue != nullptr && toneDarkValue != nullptr);
     jassert (saturationValue != nullptr && widthValue != nullptr);
     jassert (dryWetValue != nullptr);
+    jassert (scaleValue != nullptr);
 
     presetManager = std::make_unique<darkgrain::state::PresetManager> (apvts);
 }
@@ -170,6 +173,10 @@ void DarkGrainAudioProcessor::updateParameterTargets() noexcept
     grainParameters.reverseAmount = reverseAmountValue->load (std::memory_order_relaxed) * 0.01f;
     grainParameters.stereoSpread = stereoSpreadValue->load (std::memory_order_relaxed) * 0.01f;
     grainParameters.freeze = freezeValue->load (std::memory_order_relaxed) >= 0.5f;
+
+    const auto scaleIndex = static_cast<int> (scaleValue->load (std::memory_order_relaxed));
+    const auto scaleMask = darkgrain::dsp::scales::maskForIndex (scaleIndex);
+    grainParameters.scaleMask = scaleMask;
     grainEngine.setParameters (grainParameters);
 
     darkgrain::dsp::ParticleParameters particleParameters;
@@ -181,6 +188,7 @@ void DarkGrainAudioProcessor::updateParameterTargets() noexcept
     particleParameters.randomness = particleRandomnessValue->load (std::memory_order_relaxed) * 0.01f;
     particleParameters.feedback = particleFeedbackValue->load (std::memory_order_relaxed) * 0.01f;
     particleParameters.mix = particleMixValue->load (std::memory_order_relaxed) * 0.01f;
+    particleParameters.scaleMask = scaleMask;
     particleEngine.setParameters (particleParameters);
 
     darkgrain::dsp::DarkReverb::Parameters reverbParameters;

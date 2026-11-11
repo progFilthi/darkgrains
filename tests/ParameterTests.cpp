@@ -20,14 +20,14 @@ constexpr std::array<ExpectedFloatParameter, 29> expectedFloatParameters {{
     { darkgrain::parameters::ids::grainDensity, 1.0f, 64.0f, 12.0f },
     { darkgrain::parameters::ids::grainSpread, 0.0f, 100.0f, 35.0f },
     { darkgrain::parameters::ids::grainPitch, -24.0f, 24.0f, 0.0f },
-    { darkgrain::parameters::ids::pitchScatter, 0.0f, 24.0f, 3.0f },
+    { darkgrain::parameters::ids::pitchScatter, 0.0f, 24.0f, 0.0f },
     { darkgrain::parameters::ids::reverseAmount, 0.0f, 100.0f, 20.0f },
     { darkgrain::parameters::ids::stereoSpread, 0.0f, 100.0f, 45.0f },
     { darkgrain::parameters::ids::particleDensity, 0.0f, 100.0f, 35.0f },
     { darkgrain::parameters::ids::particleBrightness, 0.0f, 100.0f, 40.0f },
     { darkgrain::parameters::ids::particleRandomness, 0.0f, 100.0f, 50.0f },
     { darkgrain::parameters::ids::particleSize, 10.0f, 500.0f, 70.0f },
-    { darkgrain::parameters::ids::particlePitch, -24.0f, 0.0f, -7.0f },
+    { darkgrain::parameters::ids::particlePitch, -24.0f, 24.0f, 0.0f },
     { darkgrain::parameters::ids::particleWidth, 0.0f, 100.0f, 55.0f },
     { darkgrain::parameters::ids::particleFeedback, 0.0f, 100.0f, 20.0f },
     { darkgrain::parameters::ids::particleMix, 0.0f, 100.0f, 30.0f },
@@ -65,7 +65,7 @@ public:
         beginTest ("README parameter set exists");
 
         DarkGrainAudioProcessor processor;
-        expectEquals (processor.getParameters().size(), 31);
+        expectEquals (processor.getParameters().size(), 33);
 
         for (const auto& expected : expectedFloatParameters)
             expect (processor.apvts.getParameter (expected.id) != nullptr,
@@ -75,6 +75,20 @@ public:
                 "Missing Freeze parameter");
         expect (processor.apvts.getParameter (darkgrain::parameters::ids::bypass) != nullptr,
                 "Missing internal bypass parameter");
+
+        const auto* rootKey = dynamic_cast<juce::AudioParameterChoice*> (
+            processor.apvts.getParameter (darkgrain::parameters::ids::rootKey));
+        const auto* scale = dynamic_cast<juce::AudioParameterChoice*> (
+            processor.apvts.getParameter (darkgrain::parameters::ids::scale));
+
+        expect (rootKey != nullptr, "Missing root key parameter");
+        expect (scale != nullptr, "Missing scale parameter");
+
+        if (rootKey != nullptr)
+            expectEquals (rootKey->getIndex(), 0);
+
+        if (scale != nullptr)
+            expectEquals (scale->getIndex(), 1);
 
         beginTest ("Parameter ranges and defaults match the specification");
 

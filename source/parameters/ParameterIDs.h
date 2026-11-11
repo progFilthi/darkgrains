@@ -34,6 +34,11 @@ inline constexpr const char* width = "width";
 inline constexpr const char* outputGain = "outputGain";
 inline constexpr const char* dryWet = "dryWet";
 
+// Musical key. Used to snap generated grain and particle pitches to the
+// producer's scale so textures stay in key.
+inline constexpr const char* rootKey = "rootKey";
+inline constexpr const char* scale = "scale";
+
 // Host-facing bypass parameter. Not part of the sound design surface, but it
 // lets hosts automate bypass while the processor crossfades internally.
 inline constexpr const char* bypass = "bypass";

@@ -65,3 +65,27 @@
 - Final Release build validated with `pluginval` at strictness 6 and 10 (`SUCCESS`).
 
 No AAX, cloud, license-server, or out-of-scope features have been added.
+
+## Milestone 6 — Perform view and musical key awareness
+
+- Redesigned the editor around a single perform view: one live ember field and two macro knobs,
+  `GRAINS` and `SPACE`, instead of exposing the full control set by default.
+  `GRAINS` drives grain density, size, spread, stereo width, reverse amount, particle density and
+  mix, and dry/wet. `SPACE` drives reverb mix, size, diffusion, damping, pre-delay and stereo width.
+- Moved the detailed INPUT, GRAINS, PARTICLES, SPACE, and OUTPUT controls behind an
+  `ADVANCED` toggle that returns to the perform view on `PERFORM`.
+- Added an animated dark background: warm orange particles drift upward and gain density, size,
+  brightness and speed as the grain/particle macros rise, with a soft centre glow that pulses with
+  the output level. Freezing the buffer turns the field cold blue.
+- Added `Root Key` and `Scale` selectors to the perform view, defaulting to C minor. The subtitle
+  shows the active key and scale.
+- Added scale quantisation for generated grain and particle pitches (chromatic, natural minor,
+  major, dorian, phrygian, lydian, mixolydian, harmonic minor, and both pentatonics), so pitch
+  offsets snap onto the selected scale and textures stay in key.
+- Changed the grain pitch-scatter default from 3 st to 0 st and the particle pitch default from
+  -7 st to 0 st, so newly added instances are unpitched and in key until the producer moves a
+  pitch control.
+- Preset loading now keeps the project key and scale instead of resetting them, and the macro
+  knobs resynchronise after preset loads.
+- The parameter tree now holds 33 parameters, and the footer version reads from the build version.
+- Added scale-quantiser unit tests and extended the parameter and editor tests.

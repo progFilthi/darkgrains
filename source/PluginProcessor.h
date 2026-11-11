@@ -131,6 +131,7 @@ private:
     std::atomic<float>* saturationValue = nullptr;
     std::atomic<float>* widthValue = nullptr;
     std::atomic<float>* dryWetValue = nullptr;
+    std::atomic<float>* scaleValue = nullptr;
 
     juce::SmoothedValue<float> inputGainSmoothed;
     juce::SmoothedValue<float> outputGainSmoothed;

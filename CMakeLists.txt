@@ -88,6 +88,7 @@ target_compile_definitions(DarkGrain
     PRIVATE
         JUCE_WEB_BROWSER=0
         JUCE_USE_CURL=0
+        DARKGRAIN_VERSION="${PROJECT_VERSION}"
 )
 
 target_link_libraries(DarkGrain
@@ -126,6 +127,7 @@ if(DARKGRAIN_BUILD_TESTS)
             tests/ParameterTests.cpp
             tests/ProcessorTests.cpp
             tests/ReverbTests.cpp
+            tests/ScaleTests.cpp
     )
 
     target_include_directories(DarkGrainTests PRIVATE source)
@@ -142,6 +144,7 @@ if(DARKGRAIN_BUILD_TESTS)
             JUCE_WEB_BROWSER=0
             JUCE_USE_CURL=0
             JUCE_UNIT_TESTS=1
+            DARKGRAIN_VERSION="${PROJECT_VERSION}"
     )
 
     darkgrain_set_warnings(DarkGrainTests)

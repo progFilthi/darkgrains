@@ -3,6 +3,7 @@
 #include <juce_audio_basics/juce_audio_basics.h>
 
 #include <array>
+#include <cstdint>
 
 namespace darkgrain::dsp
 {
@@ -44,10 +45,11 @@ struct GrainParameters
     float density = 12.0f;
     float spread = 0.35f;
     float pitchSemitones = 0.0f;
-    float pitchScatterSemitones = 3.0f;
+    float pitchScatterSemitones = 0.0f;
     float reverseAmount = 0.2f;
     float stereoSpread = 0.45f;
     bool freeze = false;
+    std::uint16_t scaleMask = 0x0fff;
 };
 
 /**

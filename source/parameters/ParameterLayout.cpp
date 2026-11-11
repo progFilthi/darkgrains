@@ -37,6 +37,17 @@ std::unique_ptr<juce::AudioParameterBool> makeBool (const char* id,
                                                        defaultValue,
                                                        attributes);
 }
+
+std::unique_ptr<juce::AudioParameterChoice> makeChoice (const char* id,
+                                                        const juce::String& name,
+                                                        juce::StringArray choices,
+                                                        int defaultIndex)
+{
+    return std::make_unique<juce::AudioParameterChoice> (juce::ParameterID { id, 1 },
+                                                         name,
+                                                         std::move (choices),
+                                                         defaultIndex);
+}
 } // namespace
 
 ParameterLayout createParameterLayout()
@@ -61,7 +72,7 @@ ParameterLayout createParameterLayout()
 
     layout.add (makeFloat (ids::grainSpread, "Grain Spread", { 0.0f, 100.0f, 0.1f }, 35.0f, "%"));
     layout.add (makeFloat (ids::grainPitch, "Grain Pitch", { -24.0f, 24.0f, 0.01f }, 0.0f, "st"));
-    layout.add (makeFloat (ids::pitchScatter, "Pitch Scatter", { 0.0f, 24.0f, 0.01f }, 3.0f, "st"));
+    layout.add (makeFloat (ids::pitchScatter, "Pitch Scatter", { 0.0f, 24.0f, 0.01f }, 0.0f, "st"));
     layout.add (makeFloat (ids::reverseAmount, "Reverse Amount", { 0.0f, 100.0f, 0.1f }, 20.0f, "%"));
     layout.add (makeFloat (ids::stereoSpread, "Stereo Spread", { 0.0f, 100.0f, 0.1f }, 45.0f, "%"));
     layout.add (makeBool (ids::freeze, "Freeze", false, "On/Off"));
@@ -75,7 +86,7 @@ ParameterLayout createParameterLayout()
     particleSizeRange.setSkewForCentre (90.0f);
     layout.add (makeFloat (ids::particleSize, "Particle Size", particleSizeRange, 70.0f, "ms"));
 
-    layout.add (makeFloat (ids::particlePitch, "Particle Pitch", { -24.0f, 0.0f, 0.01f }, -7.0f, "st"));
+    layout.add (makeFloat (ids::particlePitch, "Particle Pitch", { -24.0f, 24.0f, 0.01f }, 0.0f, "st"));
     layout.add (makeFloat (ids::particleWidth, "Particle Width", { 0.0f, 100.0f, 0.1f }, 55.0f, "%"));
     layout.add (makeFloat (ids::particleFeedback, "Particle Feedback", { 0.0f, 100.0f, 0.1f }, 20.0f, "%"));
     layout.add (makeFloat (ids::particleMix, "Particle Mix", { 0.0f, 100.0f, 0.1f }, 30.0f, "%"));
@@ -106,6 +117,18 @@ ParameterLayout createParameterLayout()
     layout.add (makeFloat (ids::width, "Width", { 0.0f, 200.0f, 0.1f }, 120.0f, "%"));
     layout.add (makeFloat (ids::outputGain, "Output Gain", { -24.0f, 12.0f, 0.01f }, 0.0f, "dB"));
     layout.add (makeFloat (ids::dryWet, "Dry/Wet", { 0.0f, 100.0f, 0.1f }, 50.0f, "%"));
+
+    // MUSICAL KEY
+    layout.add (makeChoice (ids::rootKey,
+                            "Root Key",
+                            { "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B" },
+                            0));
+
+    layout.add (makeChoice (ids::scale,
+                            "Scale",
+                            { "Chromatic", "Minor", "Major", "Dorian", "Phrygian", "Lydian",
+                              "Mixolydian", "Harmonic Minor", "Pentatonic Minor", "Pentatonic Major" },
+                            1));
 
     // Internal host bypass. Kept in the layout so state, automation, and host
     // bypass all use the same parameter.

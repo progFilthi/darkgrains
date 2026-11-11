@@ -8,12 +8,12 @@
 class DarkGrainAudioProcessor;
 
 /**
-    Full DarkGrain interface.
+    DarkGrain's editor.
 
-    A single dark window with input, grain, particle, space and output sections.
-    Every control is attached to the APVTS, the preset bar can save and recall
-    user presets, and a stereo level meter plus a freeze indicator give quick
-    feedback while playing.
+    The default view is deliberately minimal: a living ember field with two
+    macro knobs (GRAIN and SPACE), the project key, presets, freeze and bypass.
+    All detailed controls live behind the ADVANCED button so the plugin feels
+    like an instrument rather than a mixing console.
 */
 class DarkGrainAudioProcessorEditor final : public juce::AudioProcessorEditor,
                                             private juce::Timer
@@ -28,6 +28,7 @@ public:
 private:
     class MeterComponent;
     class DarkGrainLookAndFeel;
+    class AnimatedBackground;
 
     struct KnobControl
     {
@@ -57,20 +58,41 @@ private:
     void savePresetFromBox();
     void setStatus (const juce::String& message);
 
+    void setAdvancedVisible (bool shouldShowAdvanced);
+    void syncMacroKnobsFromState();
+    void applyGrainMacro();
+    void applySpaceMacro();
+
+    void setParameterValue (const char* id, float value);
+    float getParameterValue (const char* id) const;
+
     DarkGrainAudioProcessor& processorRef;
     std::unique_ptr<DarkGrainLookAndFeel> lookAndFeel;
+    std::unique_ptr<AnimatedBackground> animatedBackground;
 
     juce::Label titleLabel;
     juce::Label subtitleLabel;
     juce::Label statusLabel;
+    juce::Label keyLabel;
+    juce::Label freezeIndicatorLabel;
 
     juce::ComboBox presetBox;
+    juce::ComboBox rootKeyBox;
+    juce::ComboBox scaleBox;
     juce::TextButton savePresetButton { "Save" };
+    juce::TextButton advancedButton { "ADVANCED" };
     juce::ToggleButton freezeButton { "Freeze" };
     juce::ToggleButton bypassButton { "Bypass" };
 
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> freezeAttachment;
     std::unique_ptr<juce::AudioProcessorValueTreeState::ButtonAttachment> bypassAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> rootKeyAttachment;
+    std::unique_ptr<juce::AudioProcessorValueTreeState::ComboBoxAttachment> scaleAttachment;
+
+    juce::Label grainMacroName;
+    juce::Label spaceMacroName;
+    juce::Slider grainMacroSlider;
+    juce::Slider spaceMacroSlider;
 
     std::vector<std::unique_ptr<KnobControl>> knobs;
     std::vector<std::unique_ptr<Panel>> panels;
@@ -86,8 +108,12 @@ private:
 
     juce::Rectangle<int> headerBounds;
     juce::Rectangle<int> footerBounds;
+    juce::Rectangle<int> contentBounds;
 
+    bool advancedVisible = false;
+    bool suppressMacroUpdates = false;
     bool wasFrozen = false;
+    juce::String displayedKeyText;
     float displayedInputLevel = 0.0f;
     float displayedOutputLevel = 0.0f;
 

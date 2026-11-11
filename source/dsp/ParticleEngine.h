@@ -15,11 +15,12 @@ struct ParticleParameters
     float density = 0.35f;
     float sizeMs = 70.0f;
     float brightness = 0.4f;
-    float pitchSemitones = -7.0f;
+    float pitchSemitones = 0.0f;
     float panWidth = 0.55f;
     float randomness = 0.5f;
     float feedback = 0.2f;
     float mix = 0.3f;
+    std::uint16_t scaleMask = 0x0fff;
 };
 
 /**

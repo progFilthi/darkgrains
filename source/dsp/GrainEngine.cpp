@@ -1,5 +1,7 @@
 #include "dsp/GrainEngine.h"
 
+#include "dsp/Scale.h"
+
 #include <cmath>
 
 namespace darkgrain::dsp
@@ -153,7 +155,9 @@ void GrainEngine::spawnGrain() noexcept
 
     const auto pitchOffset = (random.nextFloat() * 2.0f - 1.0f)
                            * juce::jmax (0.0f, parameters.pitchScatterSemitones);
-    const auto pitch = parameters.pitchSemitones + pitchOffset;
+    const auto requestedPitch = parameters.pitchSemitones + pitchOffset;
+    const auto pitch = static_cast<float> (
+        scales::quantizeSemitones (requestedPitch, parameters.scaleMask));
     const auto rate = static_cast<double> (std::pow (2.0, static_cast<double> (pitch) / 12.0));
 
     Grain grain;

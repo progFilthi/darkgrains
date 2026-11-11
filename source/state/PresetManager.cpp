@@ -146,7 +146,15 @@ void PresetManager::resetToDefaults()
 
 void PresetManager::applyValues (const std::vector<Value>& values)
 {
+    // The musical key belongs to the project, not the preset. Keep the
+    // producer's key selection when loading a sound.
+    const auto rootKey = apvts.getRawParameterValue (ids::rootKey)->load();
+    const auto scale = apvts.getRawParameterValue (ids::scale)->load();
+
     resetToDefaults();
+
+    setParameterValue (ids::rootKey, rootKey);
+    setParameterValue (ids::scale, scale);
 
     for (const auto& value : values)
         setParameterValue (value.id, value.value);
